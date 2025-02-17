@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Εγγραφή - Διαχείριση Ενοικιάσεων Ακινήτων</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('https://www.businessdaily.gr/sites/default/files/styles/main_full/public/2020-01/Akinita_real%20estate.jpg?itok=F2o-jLHo') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 340px;
+            margin: auto;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        button {
+            width: 95%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 400px) {
+            .form-container {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <form onsubmit="return validateForm()">
+        <h2>Εγγραφή Χρήστη</h2>
+        <div class="form-field">
+            <input type="text" name="fullname" placeholder="Ονοματεπώνυμο" required>
+        </div>
+        <div class="form-field">
+            <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-field">
+            <input type="password" name="password" placeholder="Κωδικός" required>
+        </div>
+        <div class="form-field">
+            <label for="user-type">Είδος Χρήστη</label>
+            <select id="user-type" required>
+                <option value="">Επιλέξτε τύπο...</option>
+                <option value="renter">Ενοικιαστής</option>
+                <option value="owner">Ιδιοκτήτης</option>
+            </select>
+        </div>
+        <div class="form-field">
+            <input type="text" name="phone" placeholder="Τηλέφωνο (προαιρετικό)">
+        </div>
+        <div class="form-field">
+            <input type="text" name="address" placeholder="Διεύθυνση (προαιρετικό)">
+        </div>
+        <button type="submit">Εγγραφή</button>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        var user = document.getElementById("user-type").value;
+        if (user === "") {
+            alert("Παρακαλώ επιλέξτε τύπο χρήστη.");
+            return false;
+        }
+        return true;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector("form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let username = document.querySelector("input[name='fullname']").value.trim();
+            let email = document.querySelector("input[name='email']").value.trim();
+            let password = document.querySelector("input[name='password']").value.trim();
+            let userType = document.querySelector("#user-type").value;
+
+            // Έλεγχος: Αν το όνομα περιέχει "owner" και επιλέγει Tenant ή "tenant" και επιλέγει Owner
+            if ((username.toLowerCase().includes("owner") && userType === "renter") ||
+                (username.toLowerCase().includes("tenant") && userType === "owner")) {
+                alert("❌ Το όνομα χρήστη δεν μπορεί να περιέχει 'owner' αν είστε Ενοικιαστής ή 'tenant' αν είστε Ιδιοκτήτης!");
+                return;
+            }
+
+            // Αν περάσει τον έλεγχο, συνεχίζουμε με το API request
+            fetch("/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: username,
+                    email: email,
+                    password: password,
+                    role: userType,
+                    roleId: userType === "owner" ? 2 : 3
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Εγγραφή επιτυχής! Μεταφέρεστε στο Login...");
+                        window.location.href = "login.html";
+                    } else {
+                        alert("Σφάλμα κατά την εγγραφή: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Σφάλμα:", error));
+        });
+    });
+
+</script>
+</body>
+</html>

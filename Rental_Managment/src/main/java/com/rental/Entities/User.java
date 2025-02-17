@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users") // Όνομα του πίνακα στη βάση μας.
 @Data
@@ -19,6 +21,8 @@ public class User {
     private String name; // Όνομα χρήστη
     private String email;
     private String password;
+    private int roleId;
 
     private String role; // Ρόλος χρήστη (tenant, owner, admin)
+
 }

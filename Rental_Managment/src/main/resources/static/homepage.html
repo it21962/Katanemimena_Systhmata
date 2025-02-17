@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Διαχείριση Ενοικιάσεων Ακινήτων</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP6ziJH3f1f-lOFeK02tostig8R3idf5VIfQ&s') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.5);
+            z-index: -1;
+        }
+
+        header {
+            text-align: right;
+            padding: 20px;
+            background-color: #0055bb;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        header button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        header button:hover {
+            background-color: #218838;
+        }
+
+        nav {
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .active {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #f8f8f8;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer a {
+            color: #007bff;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        #about {
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            text-align: justify;
+        }
+
+        #contact-form {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #contact-form input[type="text"],
+        #contact-form input[type="email"],
+        #contact-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #contact-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #contact-form button:hover {
+            background-color: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<header>
+    <div>Welcome to Our Service</div>
+    <div class="overlay"></div>
+    <header>
+        <button id="login-btn" onclick="window.location.href='login.html';">Σύνδεση</button>
+        <button id="register-btn" onclick="window.location.href='register.html';">Εγγραφή</button>
+    </header>
+    </div>
+</header>
+
+<nav>
+    <a onclick="showSection('home')">Αρχική</a>
+    <a onclick="showSection('about')">Σχετικά με Εμάς</a>
+    <a onclick="showSection('properties')">Ακίνητα</a>
+    <a onclick="showSection('contact')">Επικοινωνία</a>
+</nav>
+
+<div class="content active" id="home">
+    <h1>Καλώς Ήρθατε στη Διαχείριση Ενοικιάσεων Ακινήτων</h1>
+</div>
+
+<div class="content" id="about">
+    <h2>Σχετικά με Εμάς</h2>
+    <p>Η <strong>Διαχείριση Ενοικιάσεων Ακινήτων</strong> ξεκίνησε το 2010 με στόχο την παροχή ποιοτικών λύσεων στη διαχείριση ακινήτων. Με έδρα την Αθήνα, η εταιρεία μας έχει επεκταθεί γρήγορα, προσφέροντας ένα ευρύ φάσμα υπηρεσιών που καλύπτουν τις ανάγκες των ιδιοκτητών ακινήτων, επενδυτών και ενοικιαστών.</p>
+    <p>Η φιλοσοφία μας βασίζεται στη διαφάνεια, την ακεραιότητα και την εξαιρετική εξυπηρέτηση πελατών. Αναλαμβάνουμε τη διαχείριση κάθε είδους ακινήτου, από μικρά διαμερίσματα μέχρι μεγάλα εμπορικά κτήρια, εξασφαλίζοντας την άριστη κατάσταση και απόδοση τους.</p>
+</div>
+
+<div class="content" id="properties">
+    <h2>Διαθέσιμα Ακίνητα</h2>
+    <table id="property-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Τίτλος</th>
+            <th>Περιγραφή</th>
+            <th>Κατάσταση</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Δεδομένα θα προστεθούν εδώ δυναμικά -->
+        </tbody>
+    </table>
+</div>
+
+<div class="content" id="contact">
+    <h2>Επικοινωνία</h2>
+    <form id="contact-form">
+        <input type="text" id="name" name="name" placeholder="Ονοματεπώνυμο">
+        <input type="email" id="email" name="email" placeholder="Email">
+        <textarea id="message" name="message" placeholder="Μήνυμα"></textarea>
+        <button type="submit">Αποστολή</button>
+    </form>
+</div>
+
+<footer>
+    <p>© 2025 Με την επιφύλαξη παντός δικαιώματος.</p>
+    <a href="https://facebook.com">Facebook</a>
+    <a href="https://twitter.com">Twitter</a>
+    <a href="https://instagram.com">Instagram</a>
+</footer>
+
+<script>
+    function showSection(sectionId) {
+        var sections = document.querySelectorAll('.content');
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('a[onclick="showSection(\'properties\')"]').addEventListener('click', function() {
+            fetch('/owner/properties')
+                .then(response => response.json())
+                .then(properties => {
+                    const tableBody = document.querySelector('#property-table tbody');
+                    tableBody.innerHTML = '';
+
+                    properties.forEach(property => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${property.id}</td>
+                            <td>${property.title}</td>
+                            <td>${property.description}</td>
+                            <td>${property.status}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Σφάλμα κατά την ανάκτηση ακινήτων:', error));
+        });
+    });
+
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown-content');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block' ;
+    }
+</script>
+</body>
+</html>

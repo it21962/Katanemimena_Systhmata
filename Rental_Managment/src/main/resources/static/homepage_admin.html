@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Διαχείριση Ενοικιάσεων Ακινήτων</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP6ziJH3f1f-lOFeK02tostig8R3idf5VIfQ&s') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.5);
+            z-index: -1;
+        }
+
+        header {
+            text-align: right;
+            padding: 20px;
+            background-color: #0055bb;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 20px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {background-color: #f1f1f1}
+
+        .user-menu {
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+
+        .user-menu img {
+            width: 50px; /* Adjust the size of the image as needed */
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        nav {
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .active {
+            display: block;
+        }
+
+
+        #about {
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            text-align: justify;
+        }
+
+        #contact-form {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #contact-form input[type="text"],
+        #contact-form input[type="email"],
+        #contact-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #contact-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #contact-form button:hover {
+            background-color: #218838;
+        }
+
+        #property-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            text-align: left;
+        }
+
+        #property-table th, #property-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #property-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Στυλ για τον πίνακα */
+        #listing-requests-table {
+            width: 95%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Κεφαλίδες πίνακα */
+        #listing-requests-table th {
+            background: #007bff;
+            color: white;
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Κελιά πίνακα */
+        #listing-requests-table td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 15px;
+        }
+
+        /* Εναλλασσόμενο χρώμα στις σειρές */
+        #listing-requests-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Hover effect στις σειρές */
+        #listing-requests-table tr:hover {
+            background-color: rgba(0, 123, 255, 0.2);
+        }
+
+        /* Στυλ για τα κουμπιά */
+        button {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Κουμπί έγκρισης */
+        button[onclick*="approved"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button[onclick*="approved"]:hover {
+            background-color: #218838;
+        }
+
+        /* Κουμπί απόρριψης */
+        button[onclick*="rejected"] {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        button[onclick*="rejected"]:hover {
+            background-color: #c82333;
+        }
+
+        /* Στυλ για το dropdown φιλτραρίσματος */
+        #status-filter {
+            padding: 6px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        /* Στυλ για τον πίνακα χρηστών */
+        #users-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Στυλ κεφαλίδας */
+        #users-table th {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Στυλ για τα κελιά του πίνακα */
+        #users-table td {
+            padding: 12px;
+            text-align: center;  /* Κεντράρισμα περιεχομένου */
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        /* Εναλλαγή χρώματος στις σειρές για καλύτερη ορατότητα */
+        #users-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Εφέ hover */
+        #users-table tr:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        /* Στυλ κουμπιών */
+        button {
+            padding: 8px 14px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+
+
+        /* Στυλ για το κελί των ενεργειών */
+        #users-table td:last-child {
+            text-align: center;
+        }
+
+        /* Στυλ κουμπιού διαγραφής */
+        button[onclick*="deleteUser"] {
+            background-color: #dc3545;
+            color: white;
+            display: inline-block;
+            text-align: center;
+            width: 120px;
+            height: 36px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: none;
+        }
+
+        button[onclick*="deleteUser"]:hover {
+            opacity: 0.85;
+        }
+
+        .delete-btn {
+            display: inline-block; /* Βεβαιώνει ότι το κουμπί είναι ορατό */
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            width: auto;
+        }
+
+
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<header>
+    <div>Welcome to Our Service</div>
+    <div class="user-menu" onclick="toggleDropdown()">
+        <img src="https://www.clipartmax.com/png/middle/258-2582267_circled-user-male-skin-type-1-2-icon-male-user-icon.png" alt="User Menu">
+        <div class="dropdown-content">
+            <a href="javascript:void(0)" id="username-display">Username Placeholder</a>
+            <a href="login.html" onclick="logout()">Αποσύνδεση</a>
+        </div>
+    </div>
+</header>
+
+
+<nav>
+    <a onclick="showSection('home')">Αρχική</a>
+    <a onclick="showSection('about')">Σχετικά με Εμάς</a>
+    <a onclick="showSection('properties')">Ακίνητα</a>
+    <a onclick="showSection('manage-listings')">Διαχείριση Καταχωρήσεων</a>
+    <a onclick="showSection('manage-users')">Διαχείριση Χρηστών</a>
+    <a onclick="showSection('contact')">Επικοινωνία</a>
+</nav>
+
+<div class="content active" id="home">
+    <h1>Καλώς Ήρθατε στη Διαχείριση Ενοικιάσεων Ακινήτων</h1>
+</div>
+
+<div class="content" id="about">
+    <h2>Σχετικά με Εμάς</h2>
+    <p>Η <strong>Διαχείριση Ενοικιάσεων Ακινήτων</strong> ξεκίνησε το 2010 με στόχο την παροχή ποιοτικών λύσεων στη διαχείριση ακινήτων. Με έδρα την Αθήνα, η εταιρεία μας έχει επεκταθεί γρήγορα, προσφέροντας ένα ευρύ φάσμα υπηρεσιών που καλύπτουν τις ανάγκες των ιδιοκτητών ακινήτων, επενδυτών και ενοικιαστών.</p>
+    <p>Η φιλοσοφία μας βασίζεται στη διαφάνεια, την ακεραιότητα και την εξαιρετική εξυπηρέτηση πελατών. Αναλαμβάνουμε τη διαχείριση κάθε είδους ακινήτου, από μικρά διαμερίσματα μέχρι μεγάλα εμπορικά κτήρια, εξασφαλίζοντας την άριστη κατάσταση και απόδοση τους.</p>
+    <p>Παρέχουμε τις εξής υπηρεσίες:
+    <ul>
+        <li>Πλήρης διαχείριση ακινήτων</li>
+        <li>Τεχνική υποστήριξη και συντήρηση</li>
+        <li>Διαχείριση ενοικιάσεων και εξεύρεση ενοικιαστών</li>
+        <li>Νομική υποστήριξη και συμβουλευτικές υπηρεσίες</li>
+        <li>Οικονομική διαχείριση και εκπόνηση αναφορών</li>
+    </ul>
+    </p>
+    <p>Με έμπειρο προσωπικό και σύγχρονες τεχνολογίες, εγγυόμαστε την ομαλή λειτουργία και τη μέγιστη αποδοτικότητα του ακινήτου σας, αξιοποιώντας κάθε δυνατότητα για αύξηση της αξίας του. Είμαστε εδώ για να κάνουμε τη διαχείριση των ακινήτων σας απλή και αποδοτική.</p>
+    <p>Επικοινωνήστε μαζί μας σήμερα για να μάθετε περισσότερα για τις υπηρεσίες μας ή για να ξεκινήσετε τη συνεργασία με την <strong>Διαχείριση Ενοικιάσεων Ακινήτων</strong>.</p>
+</div>
+
+<div class="content" id="properties">
+    <h2>Διαθέσιμα Ακίνητα</h2>
+    <table id="property-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Τίτλος</th>
+            <th>Περιγραφή</th>
+            <th>Κατάσταση</th>
+            <th>Ενέργειες</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="content" id="manage-listings">
+    <h2>Διαχείριση Καταχωρήσεων</h2>
+    <label for="status-filter">Φιλτράρισμα κατά κατάσταση:</label>
+    <select id="status-filter" onchange="filterRequests()">
+        <option value="all">Όλες</option>
+        <option value="pending">Σε αναμονή</option>
+        <option value="approved">Εγκεκριμένες</option>
+        <option value="rejected">Απορριφθείσες</option>
+    </select>
+
+    <table id="listing-requests-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Χρήστης</th>
+            <th>Ακίνητο</th>
+            <th>Ημερομηνία</th>
+            <th>Κατάσταση</th>
+            <th>Ενέργειες</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+
+<div class="content" id="manage-users">
+    <h2>Διαχείριση Χρηστών</h2>
+
+    <table id="users-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Όνομα</th>
+            <th>Email</th>
+            <th>Ρόλος</th>
+            <th>Ενέργειες</th>
+        </tr>
+        </thead>
+        <tbody id="user-table-body">
+
+        </tbody>
+    </table>
+</div>
+
+
+<div class="content" id="contact">
+    <h2>Επικοινωνία</h2>
+    <form id="contact-form">
+        <input type="text" id="name" name="name" placeholder="Ονοματεπώνυμο">
+        <input type="email" id="email" name="email" placeholder="Email">
+        <textarea id="message" name="message" placeholder="Μήνυμα"></textarea>
+        <button type="submit">Αποστολή</button>
+    </form>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        var sections = document.querySelectorAll('.content');
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('a[onclick="showSection(\'properties\')"]').addEventListener('click', function() {
+            fetch('/owner/properties')
+                .then(response => response.json())
+                .then(properties => {
+                    const tableBody = document.querySelector('#property-table tbody');
+                    tableBody.innerHTML = '';
+
+                    properties.forEach(property => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td>${property.id}</td>
+                    <td>${property.title}</td>
+                    <td>${property.description}</td>
+                    <td>${property.status}</td>
+                    <td>
+                        <button onclick="deleteProperty(${property.id})" class="delete-btn">Διαγραφή</button>
+                    </td>
+                `;
+
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Σφάλμα κατά την ανάκτηση ακινήτων:', error));
+        });
+    });
+
+    function loadProperties() {
+        fetch('/owner/properties')
+            .then(response => response.json())
+            .then(properties => {
+                console.log("Φορτώθηκαν τα ακίνητα:", properties);
+                const tableBody = document.querySelector("#property-table tbody");
+
+                //Καθαρισμός πίνακα πριν την ανανέωση
+                tableBody.innerHTML = "";
+
+                properties.forEach(property => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                    <td>${property.id}</td>
+                    <td>${property.title}</td>
+                    <td>${property.description}</td>
+                    <td>${property.status}</td>
+                    <td>
+                        <button onclick="deleteProperty(${property.id})" class="delete-btn">Διαγραφή</button>
+                    </td>
+                `;
+                    tableBody.appendChild(row);
+                });
+
+                console.log("Ο πίνακας ενημερώθηκε με τα κουμπιά διαγραφής.");
+            })
+            .catch(error => console.error("Σφάλμα κατά την ανάκτηση ακινήτων:", error));
+    }
+
+
+
+
+    //Διαγραφή ακινήτου και ανανέωση του πίνακα
+    function deleteProperty(propertyId) {
+        if (!confirm("Σίγουρα θέλετε να διαγράψετε αυτό το ακίνητο;")) return;
+
+        fetch(`/owner/properties/${propertyId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Αποτυχία διαγραφής ακινήτου.");
+                }
+            })
+            .then(() => {
+                alert("Το ακίνητο διαγράφηκε επιτυχώς!");
+                loadProperties(); //Ανανέωση πίνακα μετά τη διαγραφή
+            })
+            .catch(error => console.error("Σφάλμα:", error));
+    }
+
+
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown-content');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/tenant/rental-requests/listings')
+            .then(response => response.json())
+            .then(requests => {
+                renderTable(requests);
+            })
+            .catch(error => console.error('Σφάλμα κατά την ανάκτηση αιτήσεων:', error));
+    });
+
+    function renderTable(requests) {
+        const tableBody = document.querySelector('#listing-requests-table tbody');
+        tableBody.innerHTML = '';
+
+        requests.forEach(request => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${request.id}</td>
+                <td>${request.user ? request.user.name : 'N/A'}</td>
+                <td>${request.property ? request.property.title : 'N/A'}</td>
+                <td>${new Date(request.requestDate).toLocaleDateString('el-GR')}</td>
+                <td>${request.status}</td>
+                <td>
+                    <button onclick="updateStatus(${request.id}, 'approved')">Έγκριση</button>
+                    <button onclick="updateStatus(${request.id}, 'rejected')">Απόρριψη</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function updateStatus(requestId, newStatus) {
+        fetch(`/tenant/rental-requests/update/${requestId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Σφάλμα κατά την ενημέρωση της κατάστασης.');
+                }
+                return response.json();
+            })
+            .then(() => {
+                alert(`Η αίτηση ${requestId} ενημερώθηκε σε ${newStatus}`);
+                loadRentalRequests();
+            })
+            .catch(error => console.error('Σφάλμα:', error));
+    }
+
+    function filterRequests() {
+        const filterValue = document.getElementById('status-filter').value;
+
+        fetch('/tenant/rental-requests/listings')
+            .then(response => response.json())
+            .then(requests => {
+                if (filterValue !== 'all') {
+                    requests = requests.filter(request => request.status === filterValue);
+                }
+                renderTable(requests);
+            })
+            .catch(error => console.error('Σφάλμα κατά την ανάκτηση αιτήσεων:', error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadUsers(); //Φόρτωση χρηστών μόλις φορτώσει η σελίδα
+    });
+
+    function loadUsers() {
+        fetch('/api/users/all') //ΣΩΣΤΟ ENDPOINT
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Σφάλμα κατά την ανάκτηση χρηστών.");
+                }
+                return response.json();
+            })
+            .then(users => {
+                console.log("Λήψη χρηστών:", users);
+                const tableBody = document.querySelector("#user-table-body");
+                tableBody.innerHTML = ''; //Καθαρισμός πίνακα πριν προστεθούν νέοι χρήστες
+
+                users.forEach(user => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <button onclick="deleteUser(${user.id})" class="delete-btn">Διαγραφή</button>
+                    </td>
+                `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error("Σφάλμα κατά την ανάκτηση χρηστών:", error));
+    }
+
+    // Διαγραφή χρήστη και ανανέωση του πίνακα
+    function deleteUser(userId) {
+        if (!confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον χρήστη;")) return;
+
+        fetch(`/api/users/delete/${userId}`, { method: 'DELETE' })  //ΣΩΣΤΟ ENDPOINT
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Σφάλμα κατά τη διαγραφή χρήστη.");
+                }
+                return response.text();
+            })
+            .then(message => {
+                alert(message);
+                loadUsers(); //Ανανέωση του πίνακα μετά τη διαγραφή
+            })
+            .catch(error => console.error("Σφάλμα:", error));
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const username = sessionStorage.getItem("loggedInUser");
+        if (username) {
+            document.getElementById("username-display").textContent = username;
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    function logout() {
+        sessionStorage.removeItem("loggedInUser");
+        window.location.href = "login.html";
+    }
+
+</script>
+</body>
+</html>

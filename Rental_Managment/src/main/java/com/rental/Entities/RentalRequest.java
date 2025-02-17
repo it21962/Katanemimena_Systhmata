@@ -34,4 +34,5 @@ public class RentalRequest {
 
     @Column(name = "request_type") // Αντιστοιχία με τη στήλη "request_type" στη βάση
     private String requestType;
+
 }

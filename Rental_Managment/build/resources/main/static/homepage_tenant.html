@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Διαχείριση Ενοικιάσεων Ακινήτων</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP6ziJH3f1f-lOFeK02tostig8R3idf5VIfQ&s') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.5);
+            z-index: -1;
+        }
+
+        header {
+            text-align: right;
+            padding: 20px;
+            background-color: #0055bb;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 20px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {background-color: #f1f1f1}
+
+        .user-menu {
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+
+        .user-menu img {
+            width: 50px; /* Adjust the size of the image as needed */
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        nav {
+            background-color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .active {
+            display: block;
+        }
+
+
+        #about {
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            text-align: justify;
+        }
+
+        #contact-form {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #contact-form input[type="text"],
+        #contact-form input[type="email"],
+        #contact-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #contact-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #contact-form button:hover {
+            background-color: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-container {
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            display: none;
+        }
+
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-container button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #218838;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<header>
+    <div>Welcome to Our Service</div>
+    <div class="user-menu" onclick="toggleDropdown()">
+        <img src="https://www.clipartmax.com/png/middle/258-2582267_circled-user-male-skin-type-1-2-icon-male-user-icon.png" alt="User Menu">
+        <div class="dropdown-content">
+            <a href="javascript:void(0)" id="username-display">Username Placeholder</a>
+            <a href="login.html" onclick="logout()">Αποσύνδεση</a>
+        </div>
+    </div>
+</header>
+
+
+<nav>
+    <a onclick="showSection('home')">Αρχική</a>
+    <a onclick="showSection('about')">Σχετικά με Εμάς</a>
+    <a onclick="showSection('properties')">Ακίνητα</a>
+    <a onclick="showSection('rentals')">Αιτήσεις</a>
+    <a onclick="showSection('contact')">Επικοινωνία</a>
+</nav>
+
+<div class="content active" id="home">
+    <h1>Καλώς Ήρθατε στη Διαχείριση Ενοικιάσεων Ακινήτων</h1>
+</div>
+
+<div class="content" id="about">
+    <h2>Σχετικά με Εμάς</h2>
+    <p>Η <strong>Διαχείριση Ενοικιάσεων Ακινήτων</strong> ξεκίνησε το 2010 με στόχο την παροχή ποιοτικών λύσεων στη διαχείριση ακινήτων. Με έδρα την Αθήνα, η εταιρεία μας έχει επεκταθεί γρήγορα, προσφέροντας ένα ευρύ φάσμα υπηρεσιών που καλύπτουν τις ανάγκες των ιδιοκτητών ακινήτων, επενδυτών και ενοικιαστών.</p>
+    <p>Η φιλοσοφία μας βασίζεται στη διαφάνεια, την ακεραιότητα και την εξαιρετική εξυπηρέτηση πελατών. Αναλαμβάνουμε τη διαχείριση κάθε είδους ακινήτου, από μικρά διαμερίσματα μέχρι μεγάλα εμπορικά κτήρια, εξασφαλίζοντας την άριστη κατάσταση και απόδοση τους.</p>
+    <p>Παρέχουμε τις εξής υπηρεσίες:
+    <ul>
+        <li>Πλήρης διαχείριση ακινήτων</li>
+        <li>Τεχνική υποστήριξη και συντήρηση</li>
+        <li>Διαχείριση ενοικιάσεων και εξεύρεση ενοικιαστών</li>
+        <li>Νομική υποστήριξη και συμβουλευτικές υπηρεσίες</li>
+        <li>Οικονομική διαχείριση και εκπόνηση αναφορών</li>
+    </ul>
+    </p>
+</div>
+
+<div class="content" id="properties">
+    <h2>Διαθέσιμα Ακίνητα</h2>
+    <table id="property-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Τίτλος</th>
+            <th>Περιγραφή</th>
+            <th>Κατάσταση</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Δεδομένα θα προστεθούν εδώ δυναμικά -->
+        </tbody>
+    </table>
+</div>
+
+<div class="content" id="rentals">
+    <h2>Αιτήσεις</h2>
+    <div class="button-container">
+        <button onclick="createNewApplication()">Νέα Αίτηση</button>
+        <button onclick="viewExistingApplications()">Υπάρχουσα Αίτηση</button>
+    </div>
+    <div class="form-container" id="new-application-form">
+        <h3>Νέα Αίτηση</h3>
+        <input type="text" id="user-name" placeholder="Ονοματεπώνυμο" required>
+        <select id="property-dropdown" required>
+            <option value="">Επιλέξτε Ακίνητο</option>
+            <!-- Οι επιλογές θα φορτωθούν δυναμικά από την βάση -->
+        </select>
+        <input type="text" id="rental-days" placeholder="Αριθμός Ημερών" required>
+        <button type="submit" onclick="submitNewApplication()">Υποβολή</button>
+    </div>
+    <div class="table-container" id="existing-requests-table" style="display: none;">
+        <h3>Υπάρχουσες Αιτήσεις</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Property ID</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Request Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Δεδομένα θα φορτωθούν δυναμικά εδώ -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="content" id="contact">
+    <h2>Επικοινωνία</h2>
+    <form id="contact-form">
+        <input type="text" id="name" name="name" placeholder="Ονοματεπώνυμο">
+        <input type="email" id="email" name="email" placeholder="Email">
+        <textarea id="message" name="message" placeholder="Μήνυμα"></textarea>
+        <button type="submit">Αποστολή</button>
+    </form>
+</div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        checkUserSession();
+        loadTenantId();
+    });
+
+    function checkUserSession() {
+        const username = sessionStorage.getItem("loggedInUser");
+        if (!username) {
+            alert("Δεν υπάρχει συνδεδεμένος χρήστης! Μεταφορά στη σελίδα σύνδεσης.");
+            window.location.href = "login.html";
+            return;
+        }
+        document.getElementById("username-display").textContent = username;
+    }
+
+    function loadTenantId() {
+        const username = sessionStorage.getItem("loggedInUser");
+
+        if (!username) {
+            console.error("Δεν υπάρχει συνδεδεμένος χρήστης!");
+            return;
+        }
+
+        fetch(`/api/get-current-user-id?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data || !data.userId) throw new Error("Δεν βρέθηκε ID χρήστη!");
+
+                sessionStorage.setItem("loggedInUserId", data.userId);
+                console.log("Tenant ID αποθηκεύτηκε:", data.userId);
+            })
+            .catch(error => console.error("Σφάλμα στην ανάκτηση του Tenant ID:", error));
+    }
+
+
+    function showSection(sectionId) {
+        var sections = document.querySelectorAll('.content');
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('a[onclick="showSection(\'properties\')"]').addEventListener('click', function() {
+            fetch('/owner/properties')
+                .then(response => response.json())
+                .then(properties => {
+                    const tableBody = document.querySelector('#property-table tbody');
+                    tableBody.innerHTML = '';
+
+                    properties.forEach(property => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${property.id}</td>
+                            <td>${property.title}</td>
+                            <td>${property.description}</td>
+                            <td>${property.status}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Σφάλμα κατά την ανάκτηση ακινήτων:', error));
+        });
+    });
+
+    function toggleDropdown() {
+        var dropdown = document.querySelector('.dropdown-content');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+
+    function createNewApplication() {
+        document.getElementById('new-application-form').style.display = 'block';
+        document.getElementById('existing-requests-table').style.display = 'none';
+    }
+
+    function viewExistingApplications() {
+        document.getElementById('new-application-form').style.display = 'none';
+        document.getElementById('existing-requests-table').style.display = 'block';
+
+        const userId = sessionStorage.getItem("loggedInUserId");
+        if (!userId) {
+            console.error("Δεν υπάρχει συνδεδεμένος χρήστης!");
+            return;
+        }
+
+        fetch(`/tenant/rental-requests?userId=${userId}`)
+            .then(response => response.json())
+            .then(requests => {
+                const filteredRequests = requests.filter(request => request.user.id == userId);
+                console.log("Φιλτραρισμένες αιτήσεις:", filteredRequests);
+
+                const tableBody = document.querySelector('#existing-requests-table tbody');
+                tableBody.innerHTML = '';
+
+                filteredRequests.forEach(request => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                <td>${request.id}</td>
+                <td>${request.user ? request.user.id : 'N/A'}</td>
+                <td>${request.property ? request.property.id : 'N/A'}</td>
+                <td>${new Date(request.requestDate).toLocaleDateString('el-GR')}</td>
+                <td>${request.status}</td>
+                <td>${request.requestType}</td>
+            `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Σφάλμα κατά την ανάκτηση αιτήσεων:', error));
+    }
+
+
+    function submitNewApplication() {
+        const userId = parseInt(sessionStorage.getItem("loggedInUserId"), 10);
+        const propertyId = parseInt(document.getElementById('property-dropdown').value, 10);
+        const rentalDays = document.getElementById('rental-days').value;
+
+        console.log("User ID:", userId);
+        console.log("Property ID:", propertyId);
+        console.log("Rental Days:", rentalDays);
+
+        if (!userId || !propertyId || !rentalDays) {
+            alert('Παρακαλώ συμπληρώστε όλα τα πεδία.');
+            return;
+        }
+
+        const newRequest = {
+            user: { id: userId },
+            property: { id: propertyId },
+            requestDate: new Date(),
+            status: 'pending',
+            requestType: 'rental',
+        };
+
+        fetch('/tenant/rental-requests/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newRequest),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Σφάλμα κατά την αποστολή της αίτησης.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Η αίτηση υποβλήθηκε επιτυχώς!');
+                document.getElementById('property-dropdown').value = '';
+                document.getElementById('rental-days').value = '';
+                viewExistingApplications();
+            })
+            .catch(error => {
+                console.error('Σφάλμα:', error);
+                alert('Υπήρξε πρόβλημα κατά την υποβολή της αίτησης.');
+            });
+    }
+
+
+    // Φόρτωση ακινήτων δυναμικά από τη βάση δεδομένων
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/owner/properties')
+            .then(response => response.json())
+            .then(properties => {
+                const dropdown = document.getElementById('property-dropdown');
+                dropdown.innerHTML = '<option value="">Επιλέξτε Ακίνητο</option>';
+                properties.filter(property => property.status === 'available').forEach(property => {
+                    const option = document.createElement('option');
+                    option.value = property.id;
+                    option.textContent = property.title;
+                    dropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Σφάλμα κατά την ανάκτηση ακινήτων:', error));
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const username = sessionStorage.getItem("loggedInUser"); // Παίρνουμε το όνομα του χρήστη από το sessionStorage
+        if (username) {
+            document.getElementById("username-display").textContent = username; // Εμφανίζουμε το όνομα χρήστη στο dropdown
+        } else {
+            window.location.href = "login.html"; // Αν δεν υπάρχει χρήστης, επιστροφή στη σελίδα login
+        }
+    });
+
+    // Συνάρτηση αποσύνδεσης
+    function logout() {
+        sessionStorage.removeItem("loggedInUser"); // Καθαρίζουμε το sessionStorage
+        window.location.href = "login.html"; // Επιστροφή στη σελίδα login
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Σύνδεση - Διαχείριση Ενοικιάσεων Ακινήτων</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('https://www.businessdaily.gr/sites/default/files/styles/main_full/public/2020-01/Akinita_real%20estate.jpg?itok=F2o-jLHo') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 340px;
+            margin: auto;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        button {
+            width: 95%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 400px) {
+            .form-container {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <form id="login-form">
+        <h2>Σύνδεση Χρήστη</h2>
+        <div class="form-field">
+            <input type="text" id="username" placeholder="Username" required>
+        </div>
+        <div class="form-field">
+            <input type="password" id="password" placeholder="Κωδικός" required>
+        </div>
+        <button type="submit">Σύνδεση</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Αποτρέπει το default submit
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    alert("Λάθος στοιχεία σύνδεσης");
+                    return null;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return;
+
+                // Αποθήκευση του userId, ρόλου και username στο sessionStorage
+                sessionStorage.setItem("loggedInUserId", data.userId);  // Αποθηκεύουμε το ID του χρήστη
+                sessionStorage.setItem("loggedInUserRole", data.roleId);
+                sessionStorage.setItem("loggedInUser", data.username);
+
+                console.log("🔹 Αποθηκευμένο User ID:", data.userId); // Debug
+
+                // Κάνουμε redirect στη σωστή σελίδα
+                if (data.roleId === 1) {
+                    window.location.href = 'homepage_admin.html';
+                } else if (data.roleId === 2) {
+                    window.location.href = 'homepage_owner.html';
+                } else if (data.roleId === 3) {
+                    window.location.href = 'homepage_tenant.html';
+                } else {
+                    alert("Άγνωστος ρόλος! Επικοινωνήστε με τον διαχειριστή.");
+                }
+            })
+            .catch(error => {
+                alert("Πρόβλημα στη σύνδεση! Δοκιμάστε ξανά.");
+            });
+
+    });
+
+</script>
+</body>
+</html>

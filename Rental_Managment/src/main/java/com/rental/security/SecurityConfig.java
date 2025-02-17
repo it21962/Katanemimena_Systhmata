@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,16 +29,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Απενεργοποίηση CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/get-user").permitAll()
-                        .requestMatchers("/owner/properties").permitAll()
-                        .requestMatchers("/tenant/rental-requests").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // Επιτρέπουμε όλα τα αιτήματα
                 )
                 .httpBasic(Customizer.withDefaults()); // HTTP Basic Authentication
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
