@@ -116,14 +116,12 @@
             let password = document.querySelector("input[name='password']").value.trim();
             let userType = document.querySelector("#user-type").value;
 
-            // Έλεγχος: Αν το όνομα περιέχει "owner" και επιλέγει Tenant ή "tenant" και επιλέγει Owner
             if ((username.toLowerCase().includes("owner") && userType === "renter") ||
                 (username.toLowerCase().includes("tenant") && userType === "owner")) {
-                alert("❌ Το όνομα χρήστη δεν μπορεί να περιέχει 'owner' αν είστε Ενοικιαστής ή 'tenant' αν είστε Ιδιοκτήτης!");
+                alert("Το όνομα χρήστη δεν μπορεί να περιέχει 'owner' αν είστε Ενοικιαστής ή 'tenant' αν είστε Ιδιοκτήτης!");
                 return;
             }
 
-            // Αν περάσει τον έλεγχο, συνεχίζουμε με το API request
             fetch("/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

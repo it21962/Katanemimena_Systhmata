@@ -81,7 +81,7 @@
 
 <script>
     document.getElementById('login-form').addEventListener('submit', function (event) {
-        event.preventDefault(); // Αποτρέπει το default submit
+        event.preventDefault();
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -106,7 +106,7 @@
                 sessionStorage.setItem("loggedInUserRole", data.roleId);
                 sessionStorage.setItem("loggedInUser", data.username);
 
-                console.log("🔹 Αποθηκευμένο User ID:", data.userId); // Debug
+                console.log("🔹 Αποθηκευμένο User ID:", data.userId);
 
                 // Κάνουμε redirect στη σωστή σελίδα
                 if (data.roleId === 1) {

@@ -106,7 +106,6 @@
             text-decoration: none;
         }
 
-        /* 🎨 Στυλ για πίνακες */
         table {
             width: 90%;
             margin: 20px auto;
@@ -117,7 +116,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* 🏷️ Στυλ κεφαλίδων */
         th {
             background-color: #007bff;
             color: white;
@@ -126,7 +124,6 @@
             font-size: 16px;
         }
 
-        /* 🖊️ Στυλ κελιών */
         td {
             padding: 12px;
             text-align: center;
@@ -134,17 +131,14 @@
             font-size: 14px;
         }
 
-        /* 🌈 Εναλλαγή χρωμάτων στις σειρές */
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
-        /* 🖱️ Hover effect */
         tr:hover {
             background-color: rgba(0, 123, 255, 0.2);
         }
 
-        /* ✨ Κουμπιά ενεργειών */
         button {
             padding: 6px 12px;
             font-size: 14px;
@@ -154,7 +148,6 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* ✅ Κουμπί έγκρισης */
         button.approve-btn {
             background-color: #28a745;
             color: white;
@@ -164,7 +157,6 @@
             background-color: #218838;
         }
 
-        /* ❌ Κουμπί απόρριψης */
         button.reject-btn {
             background-color: #dc3545;
             color: white;
@@ -174,7 +166,6 @@
             background-color: #c82333;
         }
 
-        /* 📋 Στυλ φόρμας για νέες καταχωρήσεις */
         .property-form-container {
             width: 50%;
             margin: 20px auto;
@@ -294,7 +285,6 @@
     </div>
 </header>
 
-
 <nav>
     <a onclick="showSection('home')">Αρχική</a>
     <a onclick="showSection('about')">Σχετικά με Εμάς</a>
@@ -332,7 +322,7 @@
         <button onclick="showAllProperties()">Όλα τα Ακίνητα</button>
     </div>
 
-    <div id="property-section" style="display: none;">  <!-- 🔹 Το κάνουμε αρχικά κρυφό -->
+    <div id="property-section" style="display: none;">
         <table id="property-table">
             <thead>
             <tr>
@@ -343,12 +333,10 @@
             </tr>
             </thead>
             <tbody>
-            <!-- Δεδομένα θα προστεθούν εδώ δυναμικά -->
             </tbody>
         </table>
     </div>
 </div>
-
 
 <div class="content" id="rentals">
     <h2>Αιτήσεις</h2>
@@ -372,7 +360,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Δεδομένα θα προστεθούν δυναμικά εδώ -->
         </tbody>
     </table>
 </div>
@@ -394,10 +381,9 @@
             <option value="unavailable">Μη διαθέσιμο</option>
         </select>
 
-        <button type="submit">➕ Προσθήκη Καταχώρησης</button>
+        <button type="submit">Προσθήκη Καταχώρησης</button>
     </form>
 </div>
-
 
 <div class="content contact-form-container" id="contact">
     <h2>Επικοινωνία</h2>
@@ -416,7 +402,6 @@
     </form>
 </div>
 
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         checkUserSession();
@@ -424,58 +409,55 @@
         loadOwnerId();
     });
 
-    /* ✅ Ελέγχει αν υπάρχει συνδεδεμένος χρήστης και αν όχι, επιστρέφει στη login */
     function checkUserSession() {
         const username = sessionStorage.getItem("loggedInUser");
         if (!username) {
-            alert("❌ Δεν υπάρχει συνδεδεμένος χρήστης! Μεταφορά στη σελίδα σύνδεσης.");
+            alert("Δεν υπάρχει συνδεδεμένος χρήστης! Μεταφορά στη σελίδα σύνδεσης.");
             window.location.href = "login.html";
             return;
         }
         document.getElementById("username-display").textContent = username;
     }
 
-    /* ✅ Παίρνει το ID του owner και το αποθηκεύει */
     function loadOwnerId() {
         const username = sessionStorage.getItem("loggedInUser");
 
         if (!username) {
-            console.error("❌ Δεν υπάρχει συνδεδεμένος χρήστης!");
+            console.error("Δεν υπάρχει συνδεδεμένος χρήστης!");
             return;
         }
 
         fetch(`/api/get-current-user-id?username=${username}`)
             .then(response => response.json())
             .then(data => {
-                if (!data || !data.userId) throw new Error("❌ Δεν βρέθηκε ID ιδιοκτήτη!");
+                if (!data || !data.userId) throw new Error("Δεν βρέθηκε ID ιδιοκτήτη!");
 
                 sessionStorage.setItem("ownerId", data.userId);
-                console.log("✅ Owner ID:", data.userId);
+                console.log("Owner ID:", data.userId);
 
                 loadProperties();
                 loadRentalRequests();
             })
-            .catch(error => console.error("❌ Σφάλμα:", error));
+            .catch(error => console.error("Σφάλμα:", error));
     }
 
-    /* ✅ Φορτώνει όλα τα ακίνητα του owner */
     function loadProperties() {
-        const ownerId = Number(sessionStorage.getItem("ownerId")); // Μετατροπή σε αριθμό
+        const ownerId = Number(sessionStorage.getItem("ownerId"));
 
         if (!ownerId) {
-            console.error("❌ Δεν υπάρχει Owner ID!");
+            console.error("Δεν υπάρχει Owner ID!");
             return;
         }
 
         fetch(`/owner/properties?ownerId=${ownerId}`)
             .then(response => response.json())
             .then(properties => {
-                // ✅ Σωστή σύγκριση
+
                 const ownerProperties = properties.filter(property => property.ownerId == ownerId);
 
                 const tableBody = document.querySelector("#property-table tbody");
                 if (!tableBody) {
-                    console.error("❌ Ο πίνακας ακινήτων δεν βρέθηκε στη σελίδα.");
+                    console.error("Ο πίνακας ακινήτων δεν βρέθηκε στη σελίδα.");
                     return;
                 }
                 tableBody.innerHTML = "";
@@ -491,18 +473,18 @@
                     tableBody.appendChild(row);
                 });
             })
-            .catch(error => console.error("❌ Σφάλμα κατά την ανάκτηση ακινήτων:", error));
+            .catch(error => console.error("Σφάλμα κατά την ανάκτηση ακινήτων:", error));
     }
 
     function loadAllProperties() {
         fetch(`/owner/properties`)
             .then(response => response.json())
             .then(properties => {
-                console.log("🔹 Όλα τα ακίνητα από το API:", properties);
+                console.log("Όλα τα ακίνητα από το API:", properties);
 
                 const tableBody = document.querySelector("#property-table tbody");
                 if (!tableBody) {
-                    console.error("❌ Ο πίνακας ακινήτων δεν βρέθηκε στη σελίδα.");
+                    console.error("Ο πίνακας ακινήτων δεν βρέθηκε στη σελίδα.");
                     return;
                 }
                 tableBody.innerHTML = "";
@@ -518,50 +500,45 @@
                     tableBody.appendChild(row);
                 });
             })
-            .catch(error => console.error("❌ Σφάλμα κατά την ανάκτηση όλων των ακινήτων:", error));
+            .catch(error => console.error("Σφάλμα κατά την ανάκτηση όλων των ακινήτων:", error));
     }
 
     function showOwnerProperties() {
-        document.getElementById("property-section").style.display = "block"; // ✅ Εμφάνιση του πίνακα
+        document.getElementById("property-section").style.display = "block";
         loadProperties();
     }
 
     function showAllProperties() {
-        document.getElementById("property-section").style.display = "block"; // ✅ Εμφάνιση του πίνακα
+        document.getElementById("property-section").style.display = "block";
         loadAllProperties();
     }
 
-
-
-    /* ✅ Φορτώνει rental requests που αφορούν ΜΟΝΟ properties του owner */
     function loadRentalRequests() {
         const ownerId = sessionStorage.getItem("ownerId");
 
         if (!ownerId) {
-            console.error("❌ Δεν υπάρχει Owner ID!");
+            console.error("Δεν υπάρχει Owner ID!");
             return;
         }
 
         fetch(`/tenant/rental-requests/owner?ownerId=${ownerId}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`❌ Σφάλμα API: ${response.status} - ${response.statusText}`);
+                    throw new Error(`Σφάλμα API: ${response.status} - ${response.statusText}`);
                 }
                 return response.json();
             })
             .then(requests => {
-                console.log("✅ Rental Requests για Owner:", requests);
+                console.log("Rental Requests για Owner:", requests);
                 renderRentalTable(requests);
             })
-            .catch(error => console.error("❌ Σφάλμα κατά την ανάκτηση των rental requests:", error));
+            .catch(error => console.error("Σφάλμα κατά την ανάκτηση των rental requests:", error));
     }
 
-
-    /* ✅ Εμφανίζει τις rental requests στον πίνακα */
     function renderRentalTable(requests) {
         const tableBody = document.querySelector("#rental-requests-table tbody");
         if (!tableBody) {
-            console.error("❌ Ο πίνακας αιτήσεων δεν βρέθηκε στη σελίδα.");
+            console.error("Ο πίνακας αιτήσεων δεν βρέθηκε στη σελίδα.");
             return;
         }
 
@@ -576,8 +553,8 @@
         <td>${new Date(request.requestDate).toLocaleDateString('el-GR')}</td>
         <td>${request.status}</td>
         <td>
-            <button onclick="updateRentalStatus(${request.id}, 'approved')" class="approve-btn">✔ Έγκριση</button>
-            <button onclick="updateRentalStatus(${request.id}, 'rejected')" class="reject-btn">✖ Απόρριψη</button>
+            <button onclick="updateRentalStatus(${request.id}, 'approved')" class="approve-btn">Έγκριση</button>
+            <button onclick="updateRentalStatus(${request.id}, 'rejected')" class="reject-btn">Απόρριψη</button>
         </td>
     `;
             tableBody.appendChild(row);
@@ -592,24 +569,22 @@
         })
             .then(response => response.json())
             .then(() => {
-                alert(`✅ Η αίτηση ${requestId} ενημερώθηκε σε ${newStatus}`);
+                alert(`Η αίτηση ${requestId} ενημερώθηκε σε ${newStatus}`);
                 loadRentalRequests();
                 loadProperties();
             })
-            .catch(error => console.error('❌ Σφάλμα στο Fetch:', error));
+            .catch(error => console.error('Σφάλμα στο Fetch:', error));
     }
-
 
     document.addEventListener("DOMContentLoaded", function () {
         loadRentalRequests();
     });
 
-    /* ✅ Προσθήκη Listeners για τη φόρμα */
     function setupFormListeners() {
         const addPropertyForm = document.getElementById("add-property-form");
 
         if (!addPropertyForm) {
-            console.error("❌ Η φόρμα καταχώρησης δεν βρέθηκε.");
+            console.error("Η φόρμα καταχώρησης δεν βρέθηκε.");
             return;
         }
 
@@ -622,7 +597,7 @@
             const ownerId = sessionStorage.getItem("ownerId");
 
             if (!ownerId) {
-                alert("❌ Δεν βρέθηκε ID ιδιοκτήτη!");
+                alert("Δεν βρέθηκε ID ιδιοκτήτη!");
                 return;
             }
 
@@ -634,27 +609,23 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success === "true") {
-                        alert("✅ Η καταχώρηση προστέθηκε επιτυχώς!");
+                        alert("Η καταχώρηση προστέθηκε επιτυχώς!");
 
-                        // ✅ Καθαρίζει τη φόρμα μετά την επιτυχή υποβολή
                         addPropertyForm.reset();
 
-                        // ✅ Μπορούμε επίσης να ξαναφορτώσουμε τη λίστα με τα ακίνητα αν χρειάζεται
                         loadProperties();
                     } else {
-                        alert("❌ Σφάλμα: " + data.message);
+                        alert("Σφάλμα: " + data.message);
                     }
                 })
-                .catch(error => console.error("❌ Σφάλμα:", error));
+                .catch(error => console.error("Σφάλμα:", error));
         });
     }
 
-
-    /* ✅ Εναλλαγή προβολών στο UI */
     function showSection(sectionId) {
         const section = document.getElementById(sectionId);
         if (!section) {
-            console.error(`❌ Η ενότητα "${sectionId}" δεν βρέθηκε.`);
+            console.error(`Η ενότητα "${sectionId}" δεν βρέθηκε.`);
             return;
         }
 
@@ -662,13 +633,11 @@
         section.style.display = 'block';
     }
 
-    /* ✅ Dropdown menu για αποσύνδεση */
     function toggleDropdown() {
         var dropdown = document.querySelector('.dropdown-content');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
 
-    /* ✅ Αποσύνδεση χρήστη */
     function logout() {
         sessionStorage.removeItem("loggedInUser");
         sessionStorage.removeItem("ownerId");

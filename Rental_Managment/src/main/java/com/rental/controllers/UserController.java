@@ -8,14 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")  // 🔹 Σωστό prefix για το API
+@RequestMapping("/api")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -35,11 +34,11 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> registerUser(@RequestBody User user) {
-        System.out.println("📩 Νέα προσπάθεια εγγραφής: " + user.getName());
+        System.out.println("Νέα προσπάθεια εγγραφής: " + user.getName());
 
         Map<String, String> response = new HashMap<>();
 
-        // 🔹 Έλεγχος για "owner" και "tenant" στο όνομα
+        //Έλεγχος για "owner" και "tenant" στο όνομα
         if ((user.getName().toLowerCase().contains("owner") && "tenant".equals(user.getRole())) ||
                 (user.getName().toLowerCase().contains("tenant") && "owner".equals(user.getRole()))) {
             response.put("success", "false");
@@ -47,23 +46,23 @@ public class UserController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // 🔹 Έλεγχος αν ο χρήστης υπάρχει ήδη
+        //Έλεγχος αν ο χρήστης υπάρχει ήδη
         if (userRepository.findByName(user.getName()) != null) {
             response.put("success", "false");
             response.put("message", "Το όνομα χρήστη υπάρχει ήδη.");
             return ResponseEntity.badRequest().body(response);
         }
 
-        // 🔹 Κρυπτογράφηση κωδικού
+        //Κρυπτογράφηση κωδικού
         if (passwordEncoder != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         } else {
-            System.out.println("⚠️ PasswordEncoder είναι null!");
+            System.out.println("PasswordEncoder είναι null!");
         }
 
-        // 🔹 Αποθήκευση στη βάση
+        //Αποθήκευση στη βάση
         userRepository.save(user);
-        System.out.println("✅ Εγγραφή επιτυχής για: " + user.getName());
+        System.out.println("Εγγραφή επιτυχής για: " + user.getName());
 
         response.put("success", "true");
         response.put("message", "Εγγραφή επιτυχής!");
@@ -72,7 +71,7 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<User> getUserByNameAndId(@RequestParam String name, @RequestParam Long id) {
-        System.out.println("🔍 Αναζήτηση χρήστη: " + name + " με ID: " + id);
+        System.out.println("Αναζήτηση χρήστη: " + name + " με ID: " + id);
         User user = userRepository.findByNameAndId(name, id);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -80,9 +79,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("/users/all")  // 🔹 Σωστό endpoint για την ανάκτηση χρηστών
+    @GetMapping("/users/all")  //Σωστό endpoint για την ανάκτηση χρηστών
     public ResponseEntity<List<User>> getAllUsers() {
-        System.out.println("📦 Ανάκτηση όλων των χρηστών...");
+        System.out.println("Ανάκτηση όλων των χρηστών...");
         List<User> users = userRepository.findAll();
         return ResponseEntity.ok(users);
     }
@@ -100,20 +99,19 @@ public class UserController {
 
         User user = userOptional.get();
 
-        // 🔹 Διαγραφή όλων των αιτήσεων ενοικίασης (rental_requests)
+        //Διαγραφή όλων των αιτήσεων ενοικίασης (rental_requests)
         rentalRequestRepository.deleteByUserId(userId);
 
-        // 🔹 Διαγραφή όλων των ακινήτων (properties) που ανήκουν στον χρήστη
+        //Διαγραφή όλων των ακινήτων (properties) που ανήκουν στον χρήστη
         propertyRepository.deleteByUserId(userId);
 
-        // 🔹 Διαγραφή του ίδιου του χρήστη
+        //Διαγραφή του ίδιου του χρήστη
         userRepository.deleteById(userId);
 
         response.put("success", "true");
-        response.put("message", "✅ Ο χρήστης και όλα τα δεδομένα του διαγράφηκαν!");
+        response.put("message", "Ο χρήστης και όλα τα δεδομένα του διαγράφηκαν!");
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/get-current-user-id")
     public ResponseEntity<Map<String, Long>> getCurrentUserId(@RequestParam String username) {

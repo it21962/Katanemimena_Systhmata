@@ -1,7 +1,6 @@
 package com.rental.controllers;
 
 import com.rental.Entities.Property;
-import com.rental.Entities.RentalRequest;
 import com.rental.Entities.User;
 import com.rental.Repositories.PropertyRepository;
 import com.rental.Repositories.RentalRequestRepository;
@@ -9,9 +8,7 @@ import com.rental.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
-
 
 @RestController
 @RequestMapping("/owner/properties")
@@ -40,22 +37,20 @@ public class PropertyController {
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProperty(@PathVariable Long id) {
-        // 1️⃣ Διαγραφή rental requests που σχετίζονται με το ακίνητο
+        //Διαγραφή rental requests που σχετίζονται με το ακίνητο
         rentalRequestRepository.deleteByPropertyId(id);
 
-        // 2️⃣ Διαγραφή του ίδιου του ακινήτου
+        //Διαγραφή του ίδιου του ακινήτου
         propertyRepository.deleteById(id);
 
         return ResponseEntity.noContent().build();
     }
 
-
-
     @PostMapping("/add-property")
     public ResponseEntity<Map<String, String>> addProperty(@RequestBody Map<String, Object> payload) {
         Map<String, String> response = new HashMap<>();
 
-        // 🔹 Ανάκτηση δεδομένων από το request
+        //Ανάκτηση δεδομένων από το request
         String title = (String) payload.get("title");
         String description = (String) payload.get("description");
         String status = "available";
@@ -67,7 +62,7 @@ public class PropertyController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // 🔹 Ανάκτηση του Owner από τη βάση
+        //Ανάκτηση του Owner από τη βάση
         Optional<User> ownerOptional = userRepository.findById(ownerId);
         if (!ownerOptional.isPresent()) {
             response.put("success", "false");
@@ -77,7 +72,7 @@ public class PropertyController {
 
         User owner = ownerOptional.get();
 
-        // 🔹 Δημιουργία και αποθήκευση του ακινήτου
+        //Δημιουργία και αποθήκευση του ακινήτου
         Property property = new Property();
         property.setTitle(title);
         property.setDescription(description);
@@ -87,10 +82,8 @@ public class PropertyController {
         propertyRepository.save(property);
 
         response.put("success", "true");
-        response.put("message", "✅ Το ακίνητο προστέθηκε επιτυχώς!");
+        response.put("message", "Το ακίνητο προστέθηκε επιτυχώς!");
         return ResponseEntity.ok(response);
     }
-
-
 }
 

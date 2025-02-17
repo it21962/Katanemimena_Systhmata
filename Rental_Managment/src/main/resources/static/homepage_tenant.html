@@ -242,7 +242,6 @@
     </div>
 </header>
 
-
 <nav>
     <a onclick="showSection('home')">Αρχική</a>
     <a onclick="showSection('about')">Σχετικά με Εμάς</a>
@@ -282,7 +281,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Δεδομένα θα προστεθούν εδώ δυναμικά -->
         </tbody>
     </table>
 </div>
@@ -298,7 +296,6 @@
         <input type="text" id="user-name" placeholder="Ονοματεπώνυμο" required>
         <select id="property-dropdown" required>
             <option value="">Επιλέξτε Ακίνητο</option>
-            <!-- Οι επιλογές θα φορτωθούν δυναμικά από την βάση -->
         </select>
         <input type="text" id="rental-days" placeholder="Αριθμός Ημερών" required>
         <button type="submit" onclick="submitNewApplication()">Υποβολή</button>
@@ -317,12 +314,10 @@
             </tr>
             </thead>
             <tbody>
-            <!-- Δεδομένα θα φορτωθούν δυναμικά εδώ -->
             </tbody>
         </table>
     </div>
 </div>
-
 
 <div class="content" id="contact">
     <h2>Επικοινωνία</h2>
@@ -333,7 +328,6 @@
         <button type="submit">Αποστολή</button>
     </form>
 </div>
-
 
 <script>
 
@@ -371,7 +365,6 @@
             .catch(error => console.error("Σφάλμα στην ανάκτηση του Tenant ID:", error));
     }
 
-
     function showSection(sectionId) {
         var sections = document.querySelectorAll('.content');
         sections.forEach(section => {
@@ -407,7 +400,6 @@
         var dropdown = document.querySelector('.dropdown-content');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
-
 
     function createNewApplication() {
         document.getElementById('new-application-form').style.display = 'block';
@@ -448,7 +440,6 @@
             })
             .catch(error => console.error('Σφάλμα κατά την ανάκτηση αιτήσεων:', error));
     }
-
 
     function submitNewApplication() {
         const userId = parseInt(sessionStorage.getItem("loggedInUserId"), 10);
@@ -523,10 +514,9 @@
         }
     });
 
-    // Συνάρτηση αποσύνδεσης
     function logout() {
-        sessionStorage.removeItem("loggedInUser"); // Καθαρίζουμε το sessionStorage
-        window.location.href = "login.html"; // Επιστροφή στη σελίδα login
+        sessionStorage.removeItem("loggedInUser");
+        window.location.href = "login.html";
     }
 
 </script>

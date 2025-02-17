@@ -6,7 +6,6 @@ import com.rental.Repositories.PropertyRepository;
 import com.rental.Repositories.RentalRequestRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ public class RentalRequestController {
         return ResponseEntity.ok(savedRequest);
     }
 
-
     @GetMapping("/user")
     public ResponseEntity<List<RentalRequest>> getRentalRequestsByUser(@RequestParam Long userId) {
         List<RentalRequest> userRequests = rentalRequestRepository.findByUserId(userId);
@@ -59,7 +57,7 @@ public class RentalRequestController {
             rentalRequest.setStatus(newStatus);
             rentalRequestRepository.save(rentalRequest);
 
-            // ✅ Αν η αίτηση εγκρίνεται, ενημερώνουμε και το ακίνητο
+            //Αν η αίτηση εγκρίνεται, ενημερώνουμε και το ακίνητο
             if ("approved".equals(newStatus)) {
                 Property property = rentalRequest.getProperty();
                 if (property != null) {
@@ -67,7 +65,6 @@ public class RentalRequestController {
                     propertyRepository.save(property);
                 }
             }
-
             return ResponseEntity.ok(rentalRequest);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -77,6 +74,4 @@ public class RentalRequestController {
         List<RentalRequest> requests = rentalRequestRepository.findByPropertyOwnerId(ownerId);
         return ResponseEntity.ok(requests);
     }
-
-
 }

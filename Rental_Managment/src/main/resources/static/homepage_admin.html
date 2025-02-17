@@ -151,7 +151,6 @@
             color: white;
         }
 
-        /* Στυλ για τον πίνακα */
         #listing-requests-table {
             width: 95%;
             margin: 20px auto;
@@ -162,7 +161,6 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        /* Κεφαλίδες πίνακα */
         #listing-requests-table th {
             background: #007bff;
             color: white;
@@ -173,7 +171,6 @@
             text-transform: uppercase;
         }
 
-        /* Κελιά πίνακα */
         #listing-requests-table td {
             padding: 14px;
             text-align: center;
@@ -181,17 +178,14 @@
             font-size: 15px;
         }
 
-        /* Εναλλασσόμενο χρώμα στις σειρές */
         #listing-requests-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
-        /* Hover effect στις σειρές */
         #listing-requests-table tr:hover {
             background-color: rgba(0, 123, 255, 0.2);
         }
 
-        /* Στυλ για τα κουμπιά */
         button {
             padding: 6px 12px;
             font-size: 14px;
@@ -201,7 +195,6 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* Κουμπί έγκρισης */
         button[onclick*="approved"] {
             background-color: #28a745;
             color: white;
@@ -211,7 +204,6 @@
             background-color: #218838;
         }
 
-        /* Κουμπί απόρριψης */
         button[onclick*="rejected"] {
             background-color: #dc3545;
             color: white;
@@ -221,7 +213,6 @@
             background-color: #c82333;
         }
 
-        /* Στυλ για το dropdown φιλτραρίσματος */
         #status-filter {
             padding: 6px;
             font-size: 14px;
@@ -230,7 +221,6 @@
             margin-left: 10px;
         }
 
-        /* Στυλ για τον πίνακα χρηστών */
         #users-table {
             width: 90%;
             margin: 20px auto;
@@ -241,7 +231,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Στυλ κεφαλίδας */
         #users-table th {
             background-color: #007bff;
             color: white;
@@ -250,25 +239,21 @@
             font-size: 16px;
         }
 
-        /* Στυλ για τα κελιά του πίνακα */
         #users-table td {
             padding: 12px;
-            text-align: center;  /* Κεντράρισμα περιεχομένου */
+            text-align: center;
             border-bottom: 1px solid #ddd;
             font-size: 14px;
         }
 
-        /* Εναλλαγή χρώματος στις σειρές για καλύτερη ορατότητα */
         #users-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
-        /* Εφέ hover */
         #users-table tr:hover {
             background-color: rgba(0, 123, 255, 0.1);
         }
 
-        /* Στυλ κουμπιών */
         button {
             padding: 8px 14px;
             font-size: 14px;
@@ -278,14 +263,10 @@
             transition: all 0.3s ease-in-out;
         }
 
-
-
-        /* Στυλ για το κελί των ενεργειών */
         #users-table td:last-child {
             text-align: center;
         }
 
-        /* Στυλ κουμπιού διαγραφής */
         button[onclick*="deleteUser"] {
             background-color: #dc3545;
             color: white;
@@ -306,7 +287,7 @@
         }
 
         .delete-btn {
-            display: inline-block; /* Βεβαιώνει ότι το κουμπί είναι ορατό */
+            display: inline-block;
             background-color: red;
             color: white;
             border: none;
@@ -318,13 +299,9 @@
             width: auto;
         }
 
-
         .delete-btn:hover {
             background-color: darkred;
         }
-
-
-
 
     </style>
 </head>
@@ -340,7 +317,6 @@
         </div>
     </div>
 </header>
-
 
 <nav>
     <a onclick="showSection('home')">Αρχική</a>
@@ -367,7 +343,6 @@
         <li>Νομική υποστήριξη και συμβουλευτικές υπηρεσίες</li>
         <li>Οικονομική διαχείριση και εκπόνηση αναφορών</li>
     </ul>
-    </p>
     <p>Με έμπειρο προσωπικό και σύγχρονες τεχνολογίες, εγγυόμαστε την ομαλή λειτουργία και τη μέγιστη αποδοτικότητα του ακινήτου σας, αξιοποιώντας κάθε δυνατότητα για αύξηση της αξίας του. Είμαστε εδώ για να κάνουμε τη διαχείριση των ακινήτων σας απλή και αποδοτική.</p>
     <p>Επικοινωνήστε μαζί μας σήμερα για να μάθετε περισσότερα για τις υπηρεσίες μας ή για να ξεκινήσετε τη συνεργασία με την <strong>Διαχείριση Ενοικιάσεων Ακινήτων</strong>.</p>
 </div>
@@ -389,8 +364,6 @@
         </tbody>
     </table>
 </div>
-
-
 
 <div class="content" id="manage-listings">
     <h2>Διαχείριση Καταχωρήσεων</h2>
@@ -414,11 +387,9 @@
         </tr>
         </thead>
         <tbody>
-
         </tbody>
     </table>
 </div>
-
 
 <div class="content" id="manage-users">
     <h2>Διαχείριση Χρηστών</h2>
@@ -434,11 +405,9 @@
         </tr>
         </thead>
         <tbody id="user-table-body">
-
         </tbody>
     </table>
 </div>
-
 
 <div class="content" id="contact">
     <h2>Επικοινωνία</h2>
@@ -493,7 +462,6 @@
                 console.log("Φορτώθηκαν τα ακίνητα:", properties);
                 const tableBody = document.querySelector("#property-table tbody");
 
-                //Καθαρισμός πίνακα πριν την ανανέωση
                 tableBody.innerHTML = "";
 
                 properties.forEach(property => {
@@ -509,16 +477,11 @@
                 `;
                     tableBody.appendChild(row);
                 });
-
                 console.log("Ο πίνακας ενημερώθηκε με τα κουμπιά διαγραφής.");
             })
             .catch(error => console.error("Σφάλμα κατά την ανάκτηση ακινήτων:", error));
     }
 
-
-
-
-    //Διαγραφή ακινήτου και ανανέωση του πίνακα
     function deleteProperty(propertyId) {
         if (!confirm("Σίγουρα θέλετε να διαγράψετε αυτό το ακίνητο;")) return;
 
@@ -536,7 +499,6 @@
             })
             .catch(error => console.error("Σφάλμα:", error));
     }
-
 
     function toggleDropdown() {
         var dropdown = document.querySelector('.dropdown-content');
@@ -611,7 +573,7 @@
     });
 
     function loadUsers() {
-        fetch('/api/users/all') //ΣΩΣΤΟ ENDPOINT
+        fetch('/api/users/all')
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Σφάλμα κατά την ανάκτηση χρηστών.");
@@ -644,7 +606,7 @@
     function deleteUser(userId) {
         if (!confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον χρήστη;")) return;
 
-        fetch(`/api/users/delete/${userId}`, { method: 'DELETE' })  //ΣΩΣΤΟ ENDPOINT
+        fetch(`/api/users/delete/${userId}`, { method: 'DELETE' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Σφάλμα κατά τη διαγραφή χρήστη.");
@@ -657,8 +619,6 @@
             })
             .catch(error => console.error("Σφάλμα:", error));
     }
-
-
 
     document.addEventListener("DOMContentLoaded", function() {
         const username = sessionStorage.getItem("loggedInUser");
